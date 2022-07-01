@@ -66,7 +66,8 @@ The first step is to load the farmer field data to be used for yield gap analysi
 setwd("./data")
 
 # read .csv file with data
-data <- read.csv(file="./data-wheat-ethiopia.csv", header=TRUE, stringsAsFactors = FALSE)
+urlfile <- 'https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-wheat-ethiopia.csv'
+data <- read.csv(url(urlfile))
 
 # list variables of interest
 str(data)
