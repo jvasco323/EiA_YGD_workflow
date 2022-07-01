@@ -4232,11 +4232,9 @@ al.</em> 2013)</span>, soil water properties from AfSIS-GYGA <span class="citati
 zones for Ethiopia <span class="citation">(MoA 1998)</span>, and farming
 systems classification for Africa <span class="citation">(Amede <em>et
 al.</em> 2017)</span>.</p>
-<pre class="r"><code># set working directory
-setwd(&quot;./data&quot;)
-
-# read .csv file with data
-data &lt;- read.csv(file=&quot;./data-wheat-ethiopia.csv&quot;, header=TRUE, stringsAsFactors = FALSE)
+<pre class="r"><code># read .csv file with data
+file &lt;- &#39;https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-wheat-ethiopia.csv&#39;
+data &lt;- read.csv(url(file))
 
 # list variables of interest
 str(data)</code></pre>
@@ -4294,7 +4292,7 @@ coefficients can be interpreted as elasticities, and (c) fill or drop
 data not available. If needed, missing data for specific observations of
 a given variable can be filled with the average value for that variable.
 This is documented in the chunk of code below.</p>
-<pre class="r"><code># create final dataset TO REMOVE IN FINAL DATASET!!!
+<pre class="r"><code># create final data
 data &lt;- subset(data, yield_tha &gt; 0)
 data &lt;- subset(data, residues_yn == &quot;No&quot; | residues_yn == &quot;Yes&quot;)
 data &lt;- subset(data, soil_slope == &quot;Flat&quot; | soil_slope == &quot;Medium&quot; | soil_slope == &quot;Steep&quot;)
@@ -4697,7 +4695,8 @@ households to the main database containing all field level data. The
 steps needed to retrieve these data from the GYGA API are shown in a
 <strong>companion notebook</strong>.</p>
 <pre class="r"><code># load dataframe with yw data
-yw_data &lt;- read.csv(file=&quot;./data/gps-coordinates.csv&quot;, header=TRUE, stringsAsFactors = FALSE)
+file &lt;- &#39;https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-gps-coordinates.csv&#39;
+yw_data &lt;- read.csv(url(file))
 yw_data &lt;- yw_data[c(&#39;hhid&#39;, &#39;cz_code&#39;, &#39;yw_average&#39;, &#39;yw_2009&#39;, &#39;yw_2013&#39;)]
 yw_data &lt;- unique(yw_data)
 
@@ -4719,8 +4718,8 @@ DT::datatable(summary_yw,
               options=list(columnDefs=list(list(className=&#39;dt-center&#39;)), 
                            pageLength=5, 
                            lengthMenu=c(5, 10, 15)))</code></pre>
-<div id="htmlwidget-de98004b4ddf8787cbc4" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-de98004b4ddf8787cbc4">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13"],[5501,5601,5701,5801,6301,6401,6501,6601,6701,6801,7201,7401,7501],[8.8,9.4,9.1,9,8.9,8.4,8.7,9,9.1,8.8,8.8,9.2,9],[8.2,7.7,9.5,9.2,8.1,7.4,8.6,8.1,8.2,9,5.9,8.7,9.2],[8.8,9.4,9.1,9,8.9,8.4,8.7,9,9.1,8.8,8.8,9.2,9]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Climate zone<\/th>\n      <th>Yw long-term (t/ha)<\/th>\n      <th>Yw 2009 (t/ha)<\/th>\n      <th>Yw 2013 (t/ha)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-center"},{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"pageLength":5,"lengthMenu":[5,10,15],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c25ec40623b00951db3c" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c25ec40623b00951db3c">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13"],[5501,5601,5701,5801,6301,6401,6501,6601,6701,6801,7201,7401,7501],[8.8,9.4,9.1,9,8.9,8.4,8.7,9,9.1,8.8,8.8,9.2,9],[8.2,7.7,9.5,9.2,8.1,7.4,8.6,8.1,8.2,9,5.9,8.7,9.2],[8.8,9.4,9.1,9,8.9,8.4,8.7,9,9.1,8.8,8.8,9.2,9]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Climate zone<\/th>\n      <th>Yw long-term (t/ha)<\/th>\n      <th>Yw 2009 (t/ha)<\/th>\n      <th>Yw 2013 (t/ha)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-center"},{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"pageLength":5,"lengthMenu":[5,10,15],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <hr />
 </div>
 <div id="yield-gap-decomposition" class="section level1">

@@ -62,12 +62,9 @@ ___
 The first step is to load the farmer field data to be used for yield gap analysis. The data contain (a) primary data on self-reported Ya, management practices, and biophysical conditions at field level obtained through a household survey, and (b) secondary data obtained from spatial products using the GPS coordinates of the individual households. The household survey is a panel of households over two growing seasons (2009 and 2013). Type and sources of secondary data include: climate zones from the Global Yield Gap Atlas [@vanWart2013], soil water properties from AfSIS-GYGA [@Leenaars2018], agro-ecological zones for Ethiopia [@MoA1998], and farming systems classification for Africa [@Tilahun2017].   
 
 ```{r}
-# set working directory
-setwd("./data")
-
 # read .csv file with data
-urlfile <- 'https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-wheat-ethiopia.csv'
-data <- read.csv(url(urlfile))
+file <- 'https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-wheat-ethiopia.csv'
+data <- read.csv(url(file))
 
 # list variables of interest
 str(data)
@@ -80,7 +77,7 @@ ___
 Some data transformations need to be done prior to the analysis. These include (a) re-leveling and re-classification of categorical variables, (b) log-transformation of continuous variables so that model coefficients can be interpreted as elasticities, and (c) fill or drop data not available. If needed, missing data for specific observations of a given variable can be filled with the average value for that variable. This is documented in the chunk of code below.
 
 ```{r}
-# create final dataset TO REMOVE IN FINAL DATASET!!!
+# create final data
 data <- subset(data, yield_tha > 0)
 data <- subset(data, residues_yn == "No" | residues_yn == "Yes")
 data <- subset(data, soil_slope == "Flat" | soil_slope == "Medium" | soil_slope == "Steep")
@@ -332,7 +329,8 @@ The chunk of code below combines the water-limited yield data retrieved from GYG
 
 ```{r, warning=FALSE}
 # load dataframe with yw data
-yw_data <- read.csv(file="./data/gps-coordinates.csv", header=TRUE, stringsAsFactors = FALSE)
+file <- 'https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-gps-coordinates.csv'
+yw_data <- read.csv(url(file))
 yw_data <- yw_data[c('hhid', 'cz_code', 'yw_average', 'yw_2009', 'yw_2013')]
 yw_data <- unique(yw_data)
 
