@@ -1,0 +1,34 @@
+/* Whole document: */
+body{
+  font-family: Helvetica;
+  font-size: 13pt;
+}
+/* Headers */
+h1.title {
+  font-size: 19.5pt;
+  color: Black;
+}
+h1{
+  font-size: 16pt;
+  font-weight: bold;
+}
+h2{
+  font-size: 15pt;
+}
+h3{
+  font-size: 14pt;
+}
+code.r{ /* Code block */
+  font-size: 10pt;
+}
+pre { /* Code block - determines code spacing between lines */
+  font-size: 10pt;
+}
+td {  /* Table  */
+  font-size: 12pt;
+}
+.caption {
+  font-size: 0.9em;
+  padding: 1.2em;
+}
+
