@@ -325,7 +325,7 @@ ___
 
 The water-limited yield (Yw) is the yield benchmark for rainfed crops [@vanIttersum2013], which is the case of wheat in Ethiopia. Spatial-explicit data on Yw can be obtained from different sources and a **tier-approach** is proposed for that. The most preferred data source on yield ceilings is GYGA from which data can be sourced through http://www.yieldgap.org (an API to GYGA can also be created on a demand basis). If the required data are not available in GYGA, yield ceilings can be simulated with crop models or obtained through literature review (least preferred option). Simulated yields in GYGA refer to most recently released high-yield crop cultivars, grown in pure stands. Yet, yield ceilings should be simulated for different varieties when data are available and different varieties are known to have different yield potential - see @Silva2022 for an example of how to consider yield gaps due to variety choice in the yield gap decomposition framework used here.
 
-The chunk of code below combines the water-limited yield data retrieved from GYGA based on the GPS coordinates of the surveyed households to the main database containing all field level data. The steps needed to retrieve these data from the GYGA API are shown in a **companion notebook**. 
+The chunk of code below combines the water-limited yield data retrieved from GYGA based on the GPS coordinates of the surveyed households to the main database containing all field level data. The steps needed to retrieve these data from the GYGA API are shown in a **companion notebook**. Note: the water-limited yields presented here are slightly different than those presented in @Silva2021 due to different criteria used to retrieve these data in the companion script.
 
 ```{r, warning=FALSE}
 # load dataframe with yw data
@@ -338,11 +338,11 @@ yw_data <- unique(yw_data)
 data_final <- merge(data_final, yw_data, by='hhid', all.x=T)
 
 # get yw per field
-data_final$yw_tha <- ifelse(data_final$year == 2009, data_final$yw_2009, data_final$yw_2013)
+data_final$yw_tha <- ifelse(data_final$year == 2009, data_final$Yw_2009, data_final$Yw_2013)
 
 # summarize of yw data
-summary_yw <- unique(data_final[c('gyga_cz', 'yw_average', 'yw_2009', 'yw_2013')])
-summary_yw <- aggregate(summary_yw[c(2:4)], by=list('gyga_cz'=summary_yw$gyga_cz), FUN=mean)
+summary_yw <- unique(data_final[c('GYGA_CZ', 'Yw_average', 'Yw_2009', 'Yw_2013')])
+summary_yw <- aggregate(summary_yw[c(2:4)], by=list('GYGA_CZ'=summary_yw$GYGA_CZ), FUN=mean)
 summary_yw[c(2:4)] <- round(summary_yw[c(2:3)], 1)
 colnames(summary_yw)[1] <- 'Climate zone'
 colnames(summary_yw)[2] <- 'Yw long-term (t/ha)'
@@ -364,8 +364,8 @@ Below is the code for estimating the **yield gaps in t/ha**. Please note automat
  
 ```{r, warning=FALSE, fig.align='center', fig.height=5.8, fig.width=8}
 # total yield gap in t/ha
-data_final['yg_total_2009'] <- data_final['yw_2009'] - data_final['yield_tha']
-data_final['yg_total_2013'] <- data_final['yw_2013'] - data_final['yield_tha']
+data_final['yg_total_2009'] <- data_final['Yw_2009'] - data_final['yield_tha']
+data_final['yg_total_2013'] <- data_final['Yw_2013'] - data_final['yield_tha']
 data_final['yg_total'] <- ifelse(data_final$year == 2009, data_final$yg_total_2009, 
                                                           data_final$yg_total_2013)
 
@@ -382,8 +382,8 @@ data_final['res_yg_tha'] <- ifelse(data_final$year == 2009, data_final$res_yg_th
                                                             data_final$res_yg_tha_2013)
 
 # technology yield gap in t/ha
-data_final['tech_yg_tha_2009'] <- data_final['yw_2009'] - data_final['yhf_tha']
-data_final['tech_yg_tha_2013'] <- data_final['yw_2013'] - data_final['yhf_tha']
+data_final['tech_yg_tha_2009'] <- data_final['Yw_2009'] - data_final['yhf_tha']
+data_final['tech_yg_tha_2013'] <- data_final['Yw_2013'] - data_final['yhf_tha']
 data_final['tech_yg_tha'] <- ifelse(data_final$year == 2009, data_final$tech_yg_tha_2009, 
                                                              data_final$tech_yg_tha_2013)
 
@@ -400,7 +400,7 @@ par(mfrow=c(1,1), mar=c(7,5,4,9), yaxs='i')
 {barplot(absolute_t, 
          las=2, 
          cex.lab=1.1,
-         ylim=c(0, 12),
+         ylim=c(0, 10),
          ylab='Yield and yield gaps (t/ha)',
          main='Yield gap decomposition for wheat in Ethiopia (t/ha)',
          col=pal) 
@@ -417,20 +417,20 @@ Below is the code for estimating the **yield gap closure relative to Yw**. Pleas
 
 ```{r, warning=FALSE, fig.align='center', fig.height=5.8, fig.width=8}
 # yield gap closure relative to yw
-data_final['yg_closure_2009'] <- (data_final['yield_tha'] / data_final['yw_2009']) * 100
-data_final['yg_closure_2013'] <- (data_final['yield_tha'] / data_final['yw_2013']) * 100
+data_final['yg_closure_2009'] <- (data_final['yield_tha'] / data_final['Yw_2009']) * 100
+data_final['yg_closure_2013'] <- (data_final['yield_tha'] / data_final['Yw_2013']) * 100
 data_final['yg_closure'] <- ifelse(data_final$year == 2009, data_final$yg_closure_2009, 
                                                             data_final$yg_closure_2013)
 
 # ytex relative to yw
-data_final['eff_yg_2009'] <- (data_final['ytex_tha'] / data_final['yw_2009']) * 100
-data_final['eff_yg_2013'] <- (data_final['ytex_tha'] / data_final['yw_2013']) * 100
+data_final['eff_yg_2009'] <- (data_final['ytex_tha'] / data_final['Yw_2009']) * 100
+data_final['eff_yg_2013'] <- (data_final['ytex_tha'] / data_final['Yw_2013']) * 100
 data_final['ytex_closure'] <- ifelse(data_final$year == 2009, data_final$eff_yg_2009, 
                                                               data_final$eff_yg_2013)
 
 # yhf relative to yw
-data_final['res_yg_2009'] <- (data_final['yhf_tha'] / data_final['yw_2009']) * 100
-data_final['res_yg_2013'] <- (data_final['yhf_tha'] / data_final['yw_2013']) * 100
+data_final['res_yg_2009'] <- (data_final['yhf_tha'] / data_final['Yw_2009']) * 100
+data_final['res_yg_2013'] <- (data_final['yhf_tha'] / data_final['Yw_2013']) * 100
 data_final['yhf_closure'] <- ifelse(data_final$year == 2009, data_final$res_yg_2009, 
                                                              data_final$res_yg_2013)
 
