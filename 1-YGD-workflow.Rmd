@@ -331,7 +331,7 @@ The chunk of code below combines the water-limited yield data retrieved from GYG
 # load dataframe with yw data
 file <- 'https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-gps-coordinates-final.csv'
 yw_data <- read.csv(url(file))
-yw_data <- yw_data[c('hhid', 'cz_code', 'yw_average', 'yw_2009', 'yw_2013')]
+yw_data <- yw_data[c('hhid', 'GYGA_CZ', 'Yw_average', 'Yw_2009', 'Yw_2013')]
 yw_data <- unique(yw_data)
 
 # merge yw data with the rest of the data
