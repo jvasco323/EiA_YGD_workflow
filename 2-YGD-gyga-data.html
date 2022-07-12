@@ -1554,7 +1554,7 @@ div.tocify {
 for wheat in Ethiopia</h1>
 <h4 class="author">João Vasco Silva (PhD)</h4>
 <h4 class="author">Marloes van Loon (PhD)</h4>
-<h4 class="date">04-July-2022</h4>
+<h4 class="date">12-July-2022</h4>
 
 </div>
 
@@ -1625,9 +1625,10 @@ json_data &lt;- httr::content(request, as=&quot;text&quot;)
 cz_data &lt;- jsonlite::fromJSON(json_data)[[&quot;items&quot;]]
 cz_data &lt;- cz_data[cz_data$country == unique(wheat_data$country),]</code></pre>
 <p>The next step entails merging the yield data from GYGA with the
-respective weather station coordinates. Once data are merged, the crop
-yield data is made spatially explicit using the <em>st_as_sf()</em>
-function. Please refer to the chunk of code below.</p>
+respective weather station coordinates and climate zone information.
+Once data are merged, the crop yield data is made spatially explicit
+using the <em>st_as_sf()</em> function. Please refer to the chunk of
+code below.</p>
 <pre class="r"><code># merge wheat data with gyga stations 
 wheat_data &lt;- merge(wheat_data[,c(&quot;country&quot;, &quot;country_id&quot;, &quot;station&quot;, &quot;station_id&quot;, 
                                   &quot;climatezone&quot;, &quot;crop&quot;, &quot;crop_id&quot;, 
@@ -1651,7 +1652,7 @@ wheat_data &lt;- st_as_sf(wheat_data, coords=c(&quot;longitude&quot;, &quot;lati
 </div>
 <div id="link-to-farmer-field-data" class="section level1">
 <h1><strong>Link to farmer field data</strong></h1>
-<p>Once the GYGA data are available, it is then possible to merge for
+<p>Once the GYGA data are retrieved, it is then possible to merge for
 each field available in the farmer field data. To do so, the data frame
 with the farmer field data is loaded and made spatially explicit based
 on the latitude and longitude values of each field. The climate zones
@@ -1712,7 +1713,7 @@ created containing the farmer field data for each the water-limited
 yield is greater than 0. A new column is added to that data frame to
 flag the source of the water-limited yield data.</p>
 <pre class="r"><code># fields with yield data
-data_rfwh_with_data &lt;- subset(data_rfwh, Yw_2017 &gt;= 0) # arbitrary year of the data
+data_rfwh_with_data &lt;- subset(data_rfwh, Yw_2010 &gt;= 0) # arbitrary year of the data
 data_rfwh_with_data$data_from &lt;- &quot;same_cz&quot;</code></pre>
 <p>Some fields do not fall inside climate zones for which crop model
 simulations were done and hence, they do not have a weather station
@@ -1722,7 +1723,7 @@ containing the fields for which the water-limited yield is below 0
 the closest weather station is estimated using the chunk of code
 below.</p>
 <pre class="r"><code># fields with no yield data
-data_rfwh_no_data &lt;- subset(data_rfwh, Yw_2017 &lt; 0) # arbitrary year of the data
+data_rfwh_no_data &lt;- subset(data_rfwh, Yw_2010 &lt; 0) # arbitrary year of the data
 data_rfwh_no_data &lt;- data_rfwh_no_data[,c(&#39;hhid&#39;)]
 
 # check GYGA station closer than 30km

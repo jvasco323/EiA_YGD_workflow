@@ -83,7 +83,7 @@ cz_data <- jsonlite::fromJSON(json_data)[["items"]]
 cz_data <- cz_data[cz_data$country == unique(wheat_data$country),]
 ```
 
-The next step entails merging the yield data from GYGA with the respective weather station coordinates. Once data are merged, the crop yield data is made spatially explicit using the *st_as_sf()* function. Please refer to the chunk of code below.
+The next step entails merging the yield data from GYGA with the respective weather station coordinates and climate zone information. Once data are merged, the crop yield data is made spatially explicit using the *st_as_sf()* function. Please refer to the chunk of code below.
 
 ```{r, warning=FALSE}
 # merge wheat data with gyga stations 
@@ -111,7 +111,7 @@ ___
 
 # **Link to farmer field data**
 
-Once the GYGA data are available, it is then possible to merge for each field available in the farmer field data. To do so, the data frame with the farmer field data is loaded and made spatially explicit based on the latitude and longitude values of each field. The climate zones for the country of interest are also loaded and added to the farmer field data using the *st_join()* function. This is described in the chunk of code below.
+Once the GYGA data are retrieved, it is then possible to merge for each field available in the farmer field data. To do so, the data frame with the farmer field data is loaded and made spatially explicit based on the latitude and longitude values of each field. The climate zones for the country of interest are also loaded and added to the farmer field data using the *st_join()* function. This is described in the chunk of code below.
 
 ```{r, warning=FALSE}
 # read .csv file with data
@@ -166,7 +166,7 @@ Now, the fields with water-limited yield data from the same climate zone of the 
 
 ```{r, warning=FALSE}
 # fields with yield data
-data_rfwh_with_data <- subset(data_rfwh, Yw_2017 >= 0) # arbitrary year of the data
+data_rfwh_with_data <- subset(data_rfwh, Yw_2010 >= 0) # arbitrary year of the data
 data_rfwh_with_data$data_from <- "same_cz"
 ```
 
@@ -174,7 +174,7 @@ Some fields do not fall inside climate zones for which crop model simulations we
 
 ```{r, warning=FALSE}
 # fields with no yield data
-data_rfwh_no_data <- subset(data_rfwh, Yw_2017 < 0) # arbitrary year of the data
+data_rfwh_no_data <- subset(data_rfwh, Yw_2010 < 0) # arbitrary year of the data
 data_rfwh_no_data <- data_rfwh_no_data[,c('hhid')]
 
 # check GYGA station closer than 30km
