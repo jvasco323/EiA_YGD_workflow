@@ -55,12 +55,9 @@ An example on how data can be accessed from GYGA, and linked to farmer field dat
 
 ```{r, warning=FALSE}
 # retrieve data for all weather stations
-args <- list(par1=30, par2=5)  # 30=wheat; 5=Ethiopia
-args <- lapply(args, function(x) format(x, scientific = FALSE))
-parameters <- paste0(names(args), "=", args, collapse = "&")
-request <- httr::GET(paste0("https://www.yieldgap.org/apigyga/json/cropcountrystationyear", "?", 
-                            parameters),
-                     httr::add_headers(`x-gyga-apikey`="a2183f47-cc6c-39cd-dd25-d9fa974b0d2f"))
+request <- httr::GET(
+  "https://www.yieldgap.org/apigyga/json/cropcountrystationyear?accesstoken=anonymous&par1=30&par2=5",
+  httr::add_headers())
 wheat_data <- httr::content(request, as = "text")
 wheat_data <- jsonlite::fromJSON(wheat_data)[["items"]]
 wheat_data$harvestyear <- paste0('Yw_', wheat_data$harvestyear)
@@ -202,12 +199,9 @@ data_rfwh_no_data_m30 <- subset(data_rfwh_no_data, dist > 30)
 data_rfwh_no_data_m30$country <- 'Ethiopia'
 
 # retrieve wheat data Ethiopia 
-args <- list(par1=30, par2=5)
-args <- lapply(args, function(x) format(x, scientific=FALSE))
-parameters <- paste0(names(args), "=",  args, collapse = "&")
-request <- httr::GET(paste0("https://www.yieldgap.org/apigyga/json/cropcountryyear" , "?", 
-                            parameters),
-                     httr::add_headers(`x-gyga-apikey`="a2183f47-cc6c-39cd-dd25-d9fa974b0d2f"))
+request <- httr::GET(
+  "https://www.yieldgap.org/apigyga/json/cropcountryyear?accesstoken=anonymous&par1=30&par2=5",
+  httr::add_headers())
 wheat_data_eth <- httr::content(request, as="text")
 wheat_data_eth <- jsonlite::fromJSON(wheat_data_eth)[["items"]]
 wheat_data_eth$harvestyear <- paste0('Yw_', wheat_data_eth$harvestyear)
