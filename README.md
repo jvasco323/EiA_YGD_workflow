@@ -3,6 +3,7 @@
 Yield gap decomposition has been increasingly applied in agronomy to disentangle the impact of sub-optimal management on crop production and 
 to identify agronomic measures to improve yields. To date, most applications refer to cereal crops (and some tuber and root crops) in a wide 
 range of production systems worldwide, particularly in sub-Saharan Africa, South and Southeast Asia, and Northwest Europe. 
+
 This notebook aims to formalize the R scripts used to decompose yield gaps across most of those applications making use of the framework introduced 
 by Silva et al. (2017). Data collected by CIMMYT and EIAR for wheat in Ethiopia (Silva et al., 2021), are used here as an example. 
 
